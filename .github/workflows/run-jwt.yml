@@ -1,0 +1,26 @@
+name: JWT 자동생성
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 자정 실행 (UTC 기준)
+  workflow_dispatch:     # 수동 실행도 가능하게
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 다운로드
+        uses: actions/checkout@v3
+
+      - name: Node.js 설치
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 필요한 패키지 설치
+        run: npm install
+
+      - name: JWT 만들기 실행
+        run: node index.js
+
