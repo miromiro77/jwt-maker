@@ -2,7 +2,7 @@ name: JWT 자동생성 및 이메일 발송
 
 on:
   schedule:
-    - cron: '50 5 * * *'  # JST 14:50 (UTC 5:50)
+    - cron: '56 5 * * *'  # JST 14:56 (UTC 05:56)
   workflow_dispatch:
 
 jobs:
@@ -50,7 +50,12 @@ jobs:
           echo "📤 이메일 전송 시작..."
           python3 <<EOF
 import yagmail
-yag = yagmail.SMTP(user="${carbon7727@gmail.com}", password="${jmsw kdaa lyzv svea}")
-yag.send(to="${carbon7727@gmail.com}", subject="🔐 새 JWT 토큰", contents="첨부된 jwt.txt 파일을 확인하세요.", attachments="jwt.txt")
+yag = yagmail.SMTP(user="${MAIL_USERNAME}", password="${MAIL_PASSWORD}")
+yag.send(
+  to="${MAIL_TO}",
+  subject="🔐 새 JWT 토큰",
+  contents="첨부된 jwt.txt 파일을 확인하세요.",
+  attachments="jwt.txt"
+)
 print("✅ 이메일 전송 완료")
 EOF
