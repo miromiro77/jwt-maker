@@ -27,3 +27,4 @@ const token = jwt.sign(payload, privateKey, { algorithm: "RS256" });
 
 fs.writeFileSync("jwt.txt", token);
 console.log("✅ JWT 생성 완료! → jwt.txt에 저장됨");
+console.log("JWT:", token);  // 👉 이 줄 추가
