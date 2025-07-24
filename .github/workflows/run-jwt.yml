@@ -2,7 +2,7 @@ name: JWT 자동생성 및 이메일 발송
 
 on:
   schedule:
-    - cron: '56 5 * * *'  # JST 14:56 (UTC 05:56)
+    - cron: '10 6 * * *'  # 매일 JST 15:10 (UTC 기준 6:10)
   workflow_dispatch:
 
 jobs:
@@ -25,15 +25,15 @@ jobs:
       - name: 패키지 설치
         run: npm install
 
-      - name: JWT 생성 및 저장
-        run: node index.js
-
       - name: 현재 시간 출력
         run: |
           echo "🕒 현재 시간 (UTC):"
           date -u
           echo "🕒 현재 시간 (JST):"
           TZ=Asia/Tokyo date
+
+      - name: JWT 생성 및 저장
+        run: node index.js
 
       - name: 이메일 전송을 위한 Python 설치
         run: |
@@ -48,14 +48,4 @@ jobs:
           MAIL_TO: ${{ secrets.MAIL_TO }}
         run: |
           echo "📤 이메일 전송 시작..."
-          python3 <<EOF
-import yagmail
-yag = yagmail.SMTP(user="${MAIL_USERNAME}", password="${MAIL_PASSWORD}")
-yag.send(
-  to="${MAIL_TO}",
-  subject="🔐 새 JWT 토큰",
-  contents="첨부된 jwt.txt 파일을 확인하세요.",
-  attachments="jwt.txt"
-)
-print("✅ 이메일 전송 완료")
-EOF
+          python3 .github/scripts/send_jwt_email.py
