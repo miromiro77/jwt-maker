@@ -2,7 +2,7 @@ name: JWT 자동생성 및 이메일 발송
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # 5분
+    - cron: '0 20 * * *'  # 매일 UTC 20시 (JST 오전 5시) 한 번 실행
   workflow_dispatch:
 
 jobs:
