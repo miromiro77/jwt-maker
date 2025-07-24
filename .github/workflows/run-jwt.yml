@@ -2,7 +2,7 @@ name: JWT 자동생성
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # 매일 일본 시간 기준 오전 7시 실행 (UTC 기준 22시)
+    - cron: '12 4 * * *'  # 매일 일본 시간 기준 오후 1시 실행 (UTC 기준 4시)
   workflow_dispatch:      # 수동 실행도 가능하게
 
 jobs:
@@ -24,6 +24,13 @@ jobs:
 
       - name: 필요한 패키지 설치
         run: npm install
+
+      - name: 현재 시간 출력
+        run: |
+          echo "🕒 현재 시간 (UTC):"
+          date -u
+          echo "🕒 현재 시간 (JST):"
+          TZ=Asia/Tokyo date
 
       - name: JWT 만들기 실행
         run: node index.js
