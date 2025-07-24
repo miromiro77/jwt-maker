@@ -2,7 +2,7 @@ name: JWT 자동생성
 
 on:
   schedule:
-    - cron: '25 3 * * *'  # 매일 일본 시간 기준 오전 7시 실행 (UTC 기준 22시)
+    - cron: '56 3 * * *'  # 매일 일본 시간 기준 오전 7시 실행 (UTC 기준 22시)
   workflow_dispatch:      # 수동 실행도 가능하게
 
 jobs:
