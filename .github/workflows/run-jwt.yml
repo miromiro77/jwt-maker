@@ -2,12 +2,16 @@ name: JWT 자동생성
 
 on:
   schedule:
-    - cron: '0 22 * * *'  # 매일 일본 시간 기준 오전 7시 실행 (UTC 기준 22시)
+    - cron: '25 2 * * *'  # 매일 일본 시간 기준 오전 7시 실행 (UTC 기준 22시)
   workflow_dispatch:      # 수동 실행도 가능하게
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 
     steps:
       - name: 코드 다운로드
