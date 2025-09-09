@@ -1,17 +1,22 @@
 {
   "name": "jwt-maker",
   "version": "1.0.0",
-  "description": "",
+  "description": "Generate Vonage JWT daily and write to Google Sheet (token!B2)",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "node -e \"console.log('ok')\""
+  },
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "google-spreadsheet": "^4.1.5",
+    "google-auth-library": "^9.14.2",
     "jsonwebtoken": "^9.0.2",
     "uuid": "^11.1.0"
   }
