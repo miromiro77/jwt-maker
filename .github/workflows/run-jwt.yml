@@ -2,7 +2,7 @@ name: JWT 자동생성 및 이메일 발송
 
 on:
   schedule:
-    - cron: '0 20 * * *'  # 매일 UTC 20시 (JST 오전 5시) 한 번 실행
+    - cron: '0 20 * * *'  # 매일 UTC 20시 (JST/KST 05시)
   workflow_dispatch:
 
 jobs:
@@ -11,30 +11,32 @@ jobs:
 
     env:
       APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
-      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      PRIVATE_KEY:     ${{ secrets.PRIVATE_KEY }}
+      SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}   # NEW
+      SPREADSHEET_ID:       ${{ secrets.SPREADSHEET_ID }}         # NEW
 
     steps:
       - name: 코드 다운로드
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4     # v3 -> v4 (권장)
 
       - name: Node.js 설치
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4   # v3 -> v4 (권장)
         with:
-          node-version: '18'
+          node-version: '20'          # 18도 OK, 20 권장
+          cache: 'npm'
 
       - name: 패키지 설치
         run: npm install
 
       - name: 현재 시간 출력
         run: |
-          echo "🕒 현재 시간 (UTC):"
-          date -u
-          echo "🕒 현재 시간 (JST):"
-          TZ=Asia/Tokyo date
+          echo "🕒 현재 시간 (UTC):"; date -u
+          echo "🕒 현재 시간 (JST):"; TZ=Asia/Tokyo date
 
-      - name: JWT 생성 및 저장
-        run: node index.js
+      - name: JWT 생성 & 시트 기록
+        run: node index.js             # index.js가 B2에 기록
 
+      # ===== 아래는 기존 이메일 발송 유지 =====
       - name: 이메일 전송을 위한 Python 설치
         run: |
           sudo apt-get update
@@ -45,7 +47,7 @@ jobs:
         env:
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          MAIL_TO: ${{ secrets.MAIL_TO }}
+          MAIL_TO:       ${{ secrets.MAIL_TO }}
         run: |
           echo "📤 이메일 전송 시작..."
           python3 .github/scripts/send_jwt_email.py
